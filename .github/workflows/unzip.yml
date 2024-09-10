@@ -1,14 +1,14 @@
 name: Reassemble and Unzip Split Files
 
 permissions:
-  contents: write  # This grants write permission to GitHub Actions
+  contents: write
 
 on:
   push:
     paths:
       - 'Studio.part*'
     branches:
-      - main  # Adjust this to your branch name
+      - main
 
 jobs:
   unzip:
@@ -33,9 +33,11 @@ jobs:
           ls -la unzipped_files
 
       - name: Commit unzipped files
+        env:
+          GITHUB_TOKEN: ${{ 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 }}  # Use the PAT_TOKEN here
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add unzipped_files/*
           git commit -m "Add unzipped files"
-          git push origin main
+          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/Realowg/studiov2.git
