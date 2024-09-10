@@ -1,11 +1,14 @@
 name: Reassemble and Unzip Split Files
 
+permissions:
+  contents: write  # This grants write permission to GitHub Actions
+
 on:
   push:
     paths:
-      - 'Studio.part*'  # Trigger only when split files are pushed
+      - 'Studio.part*'
     branches:
-      - main  # Adjust the branch name as needed
+      - main  # Adjust this to your branch name
 
 jobs:
   unzip:
@@ -21,7 +24,8 @@ jobs:
       - name: Reassemble split parts into zip file
         run: |
           cat Studio.part* > Studio.zip
-          ls -la  # List to confirm reassembly
+          ls -la Studio.zip  # List to confirm reassembly
+          file Studio.zip    # Check the file type to ensure it's a valid zip
 
       - name: Unzip reassembled zip file
         run: |
@@ -34,4 +38,4 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add unzipped_files/*
           git commit -m "Add unzipped files"
-          git push
+          git push origin main
